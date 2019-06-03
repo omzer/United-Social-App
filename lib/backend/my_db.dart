@@ -70,6 +70,7 @@ class MyDB {
         .collection('posts')
         .document(postId)
         .collection('Comments')
+        .orderBy('date')
         .getDocuments();
   }
 
@@ -91,6 +92,7 @@ class MyDB {
     _db.collection('posts').document(postId).collection('Comments').add({
       'authoruid': StaticContent.currentUser.uid,
       'content': comment,
+      'date': DateTime.now().toIso8601String(),
     });
     StaticContent.pushReplacement(context, ViewDetailedPost(post: post));
   }
@@ -103,7 +105,7 @@ class MyDB {
       String location,
       int price) async {
     String newPostId = 'nothing';
-
+    String code = Random().nextInt(100000000).toString();
     _db.collection('posts').add({
       'description': content,
       'location': location,
@@ -111,6 +113,7 @@ class MyDB {
       'photos': photos,
       'uid': StaticContent.currentUser.uid,
       'date': DateTime.now().toIso8601String(),
+      'code': code,
     }).then((newPost) {
       newPostId = newPost.documentID;
       print(newPostId);
@@ -162,4 +165,26 @@ class MyDB {
   }
 
   static Future<void> getAllPostForUser(String uid) async {}
+
+  static Future<void> addRateToPost(
+    BuildContext context,
+    String postId,
+    int rateVal,
+    String review,
+  ) async {
+    _db
+        .collection('posts')
+        .document(postId)
+        .updateData(
+          {
+            'rate': rateVal,
+            'rateContent': review,
+            'date': DateTime.now().toIso8601String(),
+          },
+        )
+        .then((_) {})
+        .catchError((_) {
+          MyDialogs.showCustomDialog(context, 'Error occured', _.message);
+        });
+  }
 }

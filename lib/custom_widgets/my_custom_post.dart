@@ -5,6 +5,7 @@ import 'my_text.dart';
 
 class MyPostCard extends StatelessWidget {
   final String uid;
+  final String code;
   final String location;
   final String content;
   final String tags;
@@ -19,6 +20,7 @@ class MyPostCard extends StatelessWidget {
   MyPostCard({
     this.photos,
     this.uid,
+    this.code,
     this.name,
     this.image,
     this.postId,

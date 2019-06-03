@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import 'package:social/MyClasses/static_content.dart';
 import 'package:social/backend/my_db.dart';
 import 'package:social/custom_widgets/my_custom_post.dart';
 import 'package:social/custom_widgets/my_custom_textfeild.dart';
+import 'package:social/custom_widgets/my_dialogs.dart';
 import 'package:social/custom_widgets/my_text.dart';
+import 'package:social/pages/view_image.dart';
 import 'package:social/pages/view_profile.dart';
 
 class ViewDetailedPost extends StatelessWidget {
@@ -17,7 +18,7 @@ class ViewDetailedPost extends StatelessWidget {
   });
 
 //   todo if uid == current user id then hide 'send message'
-
+  ListView pst;
   @override
   Widget build(BuildContext context) {
     _context = context;
@@ -29,6 +30,7 @@ class ViewDetailedPost extends StatelessWidget {
         child: FutureBuilder(
           future: MyDB.getCommentsFromPost(post.postId),
           builder: (context, commentsSnap) {
+            if (pst != null) return pst;
             if (commentsSnap.connectionState == ConnectionState.waiting) {
               return LinearProgressIndicator();
             }
@@ -91,7 +93,7 @@ class ViewDetailedPost extends StatelessWidget {
                   ));
                 }
 
-                return ListView(children: list);
+                return pst = ListView(children: list);
               },
             );
           },
@@ -141,8 +143,8 @@ class ViewDetailedPost extends StatelessWidget {
     );
   }
 
-  void _closeSession() {
-    //todo show random characters and verfiey with others
+  void _closeSession() async{
+    await MyDialogs.showReviewDialog(_context, post.code, post.uid, post.postId);
   }
 
   void _sendMessage() {}
@@ -235,11 +237,17 @@ class ViewDetailedPost extends StatelessWidget {
 
     post.photos.forEach((photo) {
       imgs.add(
-        FadeInImage.assetNetwork(
-          image: photo,
-          placeholder: 'lib/assets/imgs/loading.gif',
-          width: 200,
-          height: 160,
+        InkWell(
+          onTap: () => StaticContent.push(_context, ViewImage(image: photo)),
+          child: Hero(
+            tag: photo,
+            child: FadeInImage.assetNetwork(
+              image: photo,
+              placeholder: 'lib/assets/imgs/loading.gif',
+              width: 200,
+              height: 160,
+            ),
+          ),
         ),
       );
       imgs.add(SizedBox(width: 20));

@@ -169,6 +169,7 @@ class _MyHomePageState extends State<MyHomePage>
           String uid = currentPost['uid'];
           String location = currentPost['location'];
           String date = currentPost['date'];
+          String code = currentPost['code'];
           int price = currentPost['price'];
           String content = currentPost['description'];
           String postId = currentPost.documentID;
@@ -177,6 +178,7 @@ class _MyHomePageState extends State<MyHomePage>
           MyPostCard post;
           post = MyPostCard(
             uid: uid,
+            code: code,
             location: location,
             date: date,
             price: price,
