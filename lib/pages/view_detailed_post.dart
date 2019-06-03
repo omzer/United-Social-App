@@ -50,7 +50,6 @@ class ViewDetailedPost extends StatelessWidget {
                 list.add(_buildDate());
                 list.add(SizedBox(height: 8));
                 list.add(_buildPhotos());
-                list.add(_buildTitle());
                 list.add(SizedBox(height: 8));
                 list.add(_buildContent());
 
@@ -175,16 +174,6 @@ class ViewDetailedPost extends StatelessWidget {
     );
   }
 
-  Widget _buildTitle() {
-    return MyText(
-      content: post.title,
-      color: Colors.deepPurple,
-      size: 22,
-      isBold: true,
-      align: TextAlign.center,
-    );
-  }
-
   Widget _buildContent() {
     return MyText(
       content: post.content,
@@ -246,8 +235,9 @@ class ViewDetailedPost extends StatelessWidget {
 
     post.photos.forEach((photo) {
       imgs.add(
-        Image.network(
-          photo,
+        FadeInImage.assetNetwork(
+          image: photo,
+          placeholder: 'lib/assets/imgs/loading.gif',
           width: 200,
           height: 160,
         ),

@@ -292,6 +292,7 @@ class _MySignUpState extends State<MySignUp> {
       return false;
     }
     if (_password1 != _password2) {
+      _password1 = _password2 = '';
       MyDialogs.showCustomDialog(
           context, 'Password not match', 'Your passwords must match');
       return false;

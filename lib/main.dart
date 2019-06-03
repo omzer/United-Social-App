@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social/pages/guid_page.dart';
 
-import 'MyClasses/my_user.dart';
 
 void main() => runApp(MyApp());
 

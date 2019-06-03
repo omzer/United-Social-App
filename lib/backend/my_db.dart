@@ -97,7 +97,6 @@ class MyDB {
 
   static Future<void> newPost(
       BuildContext context,
-      String title,
       String content,
       List<String> photos,
       List<String> tags,
@@ -106,7 +105,6 @@ class MyDB {
     String newPostId = 'nothing';
 
     _db.collection('posts').add({
-      'title': title,
       'description': content,
       'location': location,
       'price': price,
@@ -163,7 +161,5 @@ class MyDB {
     return imageURL;
   }
 
-  static  Future<void> getAllPostForUser (String uid) async{
-
-  }
+  static Future<void> getAllPostForUser(String uid) async {}
 }

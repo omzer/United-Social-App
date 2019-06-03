@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:social/MyClasses/static_content.dart';
 import 'package:social/backend/firebase_auth.dart';
@@ -96,6 +96,7 @@ class _MyHomePageState extends State<MyHomePage>
 
   AppBar _buildAppBar() {
     return AppBar(
+      elevation: 0,
       title: FlatButton.icon(
         icon: Icon(
           Icons.search,
@@ -151,14 +152,19 @@ class _MyHomePageState extends State<MyHomePage>
     );
   }
 
+  List<Widget> posts;
+
   Widget _buildHomeTab() {
+    if (posts != null) {
+      return _buildPullToScrol(ListView(children: posts));
+    }
+    posts = [];
     return FutureBuilder(
       future: MyDB.getAllPosts(),
       builder: (context, snaps) {
         if (snaps.connectionState == ConnectionState.waiting) {
           return Center(child: LinearProgressIndicator());
         }
-        List<Widget> posts = [];
         snaps.data.documents.forEach((currentPost) {
           String uid = currentPost['uid'];
           String location = currentPost['location'];
@@ -166,17 +172,7 @@ class _MyHomePageState extends State<MyHomePage>
           int price = currentPost['price'];
           String content = currentPost['description'];
           String postId = currentPost.documentID;
-          String title = currentPost['title'];
           List<dynamic> photos = currentPost['photos'];
-
-//          print('uid $uid');
-//          print('location $location');
-//          print('date $date');
-//          print('price $price');
-//          print('content $content');
-//          print('postId $postId');
-//          print('title $title');
-//          print('photos $photos');
 
           MyPostCard post;
           post = MyPostCard(
@@ -186,13 +182,25 @@ class _MyHomePageState extends State<MyHomePage>
             price: price,
             content: content,
             postId: postId,
-            title: title,
             photos: photos,
             onCardClicked: () => _postClicked(post),
           );
           posts.add(post);
         });
-        return ListView(children: posts);
+        return _buildPullToScrol(ListView(children: posts));
+      },
+    );
+  }
+
+  Widget _buildPullToScrol(ListView list) {
+    return LiquidPullToRefresh(
+      showChildOpacityTransition: false,
+      child: list,
+      onRefresh: () async {
+        await Future.delayed(Duration(milliseconds: 1500));
+        setState(() {
+          posts = null;
+        });
       },
     );
   }

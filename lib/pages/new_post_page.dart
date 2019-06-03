@@ -18,7 +18,7 @@ class NewPostPageStf extends StatefulWidget {
 }
 
 class _NewPostPageStateStf extends State<NewPostPageStf> {
-  String _content, _location, _price, _tag, _title;
+  String _content, _location, _price, _tag;
   List<Widget> _tagsChips = [];
   List<String> _tagsText = [];
   List<String> _photos = [];
@@ -53,11 +53,6 @@ class _NewPostPageStateStf extends State<NewPostPageStf> {
           SizedBox(height: 16),
           Image.asset('lib/assets/imgs/content.png'),
           SizedBox(height: 8),
-          MyTextFeild(
-            controller: TextEditingController(text: _title),
-            onChange: (input) => _title = input,
-            label: 'Subject (title of the post)',
-          ),
           SizedBox(height: 16),
           TextField(
             controller: TextEditingController(text: _content),
@@ -279,18 +274,12 @@ class _NewPostPageStateStf extends State<NewPostPageStf> {
     });
     String url = await MyDB.uploadImage(path);
     setState(() {
-      _uploadingStatus = '${_photos.length} photos added';
       _photos.add(url);
+      _uploadingStatus = '${_photos.length} photos added';
     });
   }
 
   void _submitInfo() {
-    if (_title == null || _title.length < 5) {
-      MyDialogs.showCustomDialog(
-          context, 'Invalid title', 'Please write meaningful post title!');
-      return;
-    }
-
     if (_content == null || _content.length < 5) {
       MyDialogs.showCustomDialog(context, 'Invalid content',
           'Please write your post content correctly!');
@@ -320,7 +309,6 @@ class _NewPostPageStateStf extends State<NewPostPageStf> {
           'Please right valid price (should be integer)');
       return;
     }
-    MyDB.newPost(
-        context, _title, _content, _photos, _tagsText, _location, price);
+    MyDB.newPost(context, _content, _photos, _tagsText, _location, price);
   }
 }

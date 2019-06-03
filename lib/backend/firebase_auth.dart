@@ -9,7 +9,7 @@ import 'package:social/pages/login_page.dart';
 
 class MyAuth {
   static final _myAuth = FirebaseAuth.instance;
-  static FirebaseUser _user = null;
+  static FirebaseUser _user;
 
   static signIn(BuildContext context, String email, String password) {
     _myAuth.signInWithEmailAndPassword(email: email, password: password).then(

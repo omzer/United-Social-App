@@ -50,7 +50,6 @@ class UserProfile extends StatelessWidget {
                     int price = snap.data['price'];
                     String content = snap.data['description'];
                     String postId = snap.data.documentID;
-                    String title = snap.data['title'];
                     List<dynamic> photos = snap.data['photos'];
                     MyPostCard current;
                     current = MyPostCard(
@@ -60,7 +59,6 @@ class UserProfile extends StatelessWidget {
                       price: price,
                       content: content,
                       postId: postId,
-                      title: title,
                       photos: photos,
                       onCardClicked: () => _postClicked(current),
                     );

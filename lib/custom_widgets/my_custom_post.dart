@@ -6,7 +6,6 @@ import 'my_text.dart';
 class MyPostCard extends StatelessWidget {
   final String uid;
   final String location;
-  final String title;
   final String content;
   final String tags;
   String date;
@@ -19,7 +18,6 @@ class MyPostCard extends StatelessWidget {
 
   MyPostCard({
     this.photos,
-    this.title,
     this.uid,
     this.name,
     this.image,
@@ -33,11 +31,12 @@ class MyPostCard extends StatelessWidget {
   });
 
   BuildContext _context;
-
+  SizedBox box;
   @override
   Widget build(BuildContext context) {
     _context = context;
-    return SizedBox(
+    if (box != null) return box;
+    return box = SizedBox(
       width: double.infinity,
       height: 240,
       child: Center(
@@ -57,7 +56,6 @@ class MyPostCard extends StatelessWidget {
                   return Stack(
                     children: <Widget>[
                       _buildPostLocation(),
-                      _buildPostTitle(),
                       _buildPostDate(),
                       _buildContent(),
                       _buildPrice(),
@@ -131,19 +129,6 @@ class MyPostCard extends StatelessWidget {
         content: location,
         color: Colors.blueAccent,
         size: 12,
-      ),
-    );
-  }
-
-  Widget _buildPostTitle() {
-    return Positioned(
-      left: 0,
-      top: 100,
-      child: MyText(
-        content: title,
-        color: Colors.deepPurple,
-        size: 16,
-        isBold: true,
       ),
     );
   }
