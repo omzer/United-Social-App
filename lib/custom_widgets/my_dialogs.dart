@@ -68,11 +68,19 @@ class MyDialogs {
       _showCode(context, code);
     } else {
       // owner is someone else
+      bool result = await _askForCode(context, code);
+      if (result) {
+        // tell db to close this post
+        MyDB.closePost(context, postId);
+        // take exchange reviews
+      }
     }
   }
 
   static double ratingVal;
   static String reviewVal;
+  static String codeEntered;
+
   static Future<void> _showReviewDialog(
       BuildContext context, String postId, String code) async {
     ratingVal = 0;
@@ -125,9 +133,42 @@ class MyDialogs {
         });
   }
 
-  static Future<void> _askForCode(BuildContext context, String code)async{
+  static Future<bool> _askForCode(BuildContext context, String code) async {
+    bool result = false;
     await showDialog(
-      
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Check code'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Text('Write down the code you have to close the post'),
+                SizedBox(height: 16.0),
+                MyTextFeild(
+                  label: 'code',
+                  onChange: (_) => codeEntered = _,
+                  keyType: TextInputType.number,
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('submit'),
+              onPressed: () {
+                if (code == codeEntered) {
+                  Navigator.pop(context);
+                  result = true;
+                } else {
+                  showCustomDialog(context, 'Error', 'Wrong code');
+                }
+              },
+            )
+          ],
+        );
+      },
     );
+    return result;
   }
 }

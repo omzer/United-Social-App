@@ -295,7 +295,14 @@ class _NewPostPageStateStf extends State<NewPostPageStf> {
           'Please write the location where you need the post to appear!');
       return;
     }
-
+    if (_uploadingStatus[0] == 'U') {
+      MyDialogs.showCustomDialog(
+        context,
+        'Still uploading',
+        'Wait until your photos done uploading!',
+      );
+      return;
+    }
     if (_price == null) {
       setState(() {
         _price = '0';

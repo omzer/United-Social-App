@@ -187,4 +187,12 @@ class MyDB {
           MyDialogs.showCustomDialog(context, 'Error occured', _.message);
         });
   }
+
+  static Future<void> closePost(BuildContext context, String postId) async {
+    await _db.collection('posts').document(postId).updateData({
+      'closed': true,
+    }).then((_) {
+      Navigator.pop(context);
+    });
+  }
 }
