@@ -143,8 +143,13 @@ class ViewDetailedPost extends StatelessWidget {
     );
   }
 
-  void _closeSession() async{
-    await MyDialogs.showReviewDialog(_context, post.code, post.uid, post.postId);
+  void _closeSession() async {
+    await MyDialogs.showReviewDialog(
+      _context,
+      post.code,
+      post.uid,
+      post.postId,
+    );
   }
 
   void _sendMessage() {}

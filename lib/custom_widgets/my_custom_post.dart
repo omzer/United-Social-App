@@ -126,7 +126,7 @@ class MyPostCard extends StatelessWidget {
   Widget _buildPostLocation() {
     return Positioned(
       left: 0,
-      top: 85,
+      top: 75,
       child: MyText(
         content: location,
         color: Colors.blueAccent,
@@ -138,7 +138,7 @@ class MyPostCard extends StatelessWidget {
   Widget _buildContent() {
     return Positioned(
       left: 8,
-      top: 125,
+      top: 100,
       child: Container(
         width: MediaQuery.of(_context).size.width,
         height: 80,

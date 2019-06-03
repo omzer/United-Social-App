@@ -59,19 +59,19 @@ class MyDialogs {
   static Future<void> showReviewDialog(
     BuildContext context,
     String code,
-    String uid,
+    String postOwnerID,
     String postId,
   ) async {
-    if (uid == StaticContent.currentUser.uid) {
+    if (postOwnerID == StaticContent.currentUser.uid) {
       // if the owner of the post is me
-      await _showReviewDialog(context, postId, code);
+      await _showReviewDialog(context, postId, code, true, postOwnerID);
       _showCode(context, code);
     } else {
       // owner is someone else
       bool result = await _askForCode(context, code);
       if (result) {
         // tell db to close this post
-        MyDB.closePost(context, postId);
+        await _showReviewDialog(context, postId, code, false, postOwnerID);
         // take exchange reviews
       }
     }
@@ -82,7 +82,12 @@ class MyDialogs {
   static String codeEntered;
 
   static Future<void> _showReviewDialog(
-      BuildContext context, String postId, String code) async {
+    BuildContext context,
+    String postId,
+    String code,
+    bool isPostOwner,
+    String postOwnerID,
+  ) async {
     ratingVal = 0;
     reviewVal = '';
     await showDialog(
@@ -106,11 +111,21 @@ class MyDialogs {
             FlatButton(
               onPressed: () async {
                 // Review Clicked
-                await MyDB.addRateToPost(
-                    context, postId, ratingVal.round(), reviewVal);
-                Navigator.pop(context);
+                if (isPostOwner) {
+                  await MyDB.addRateToPost(
+                      context, postId, ratingVal.round(), reviewVal);
+                  Navigator.pop(context);
+                } else {
+                  MyDB.closePost(
+                    context,
+                    postId,
+                    ratingVal.round(),
+                    reviewVal,
+                    postOwnerID,
+                  );
+                }
               },
-              child: Text('Review'),
+              child: Text('Send review'),
             )
           ],
         );

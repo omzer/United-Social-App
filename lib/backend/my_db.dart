@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social/MyClasses/static_content.dart';
 import 'package:flutter/material.dart';
 import 'package:social/custom_widgets/my_dialogs.dart';
+import 'package:social/pages/home_page.dart';
 import 'package:social/pages/view_detailed_post.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -188,11 +189,45 @@ class MyDB {
         });
   }
 
-  static Future<void> closePost(BuildContext context, String postId) async {
+  static Future<void> closePost(
+    BuildContext context,
+    String postId,
+    int ratingVal,
+    String review,
+    String postOwnerID,
+  ) async {
+    // Set post closed to true
     await _db.collection('posts').document(postId).updateData({
       'closed': true,
-    }).then((_) {
-      Navigator.pop(context);
+    }).then((_) {});
+    // exchange reviews
+    // send rating for the post owner
+    await _db.collection('users').document(postOwnerID).collection('rate').add(
+      {
+        'date': DateTime.now().toIso8601String(),
+        'rate': ratingVal,
+        'rateContent': review,
+        'uid': StaticContent.currentUser.uid,
+      },
+    );
+    // Get rating my ratings from the post
+    await _db.collection('posts').document(postId).get().then((data) {
+      ratingVal = data.data['rate'];
+      review = data.data['rateContent'];
+    });
+    await _db
+        .collection('users')
+        .document(StaticContent.currentUser.uid)
+        .collection('rate')
+        .add(
+      {
+        'date': DateTime.now().toIso8601String(),
+        'rate': ratingVal,
+        'rateContent': review,
+        'uid': postOwnerID,
+      },
+    ).then((_) {
+      StaticContent.pushReplacement(context, HomePage());
     });
   }
 }
