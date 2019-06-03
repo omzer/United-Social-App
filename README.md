@@ -1,13 +1,16 @@
-# In a nutshell 
+# social
 
-Cross platform App, used to connect between pople who need services (help) and others whom willing to serve.
-This is my graduation prject.
+A new Flutter project.
 
+## Getting Started
 
-## Backend
+This project is a starting point for a Flutter application.
 
-All backend Database stuff and services are handled using Google firebase services.
+A few resources to get you started if this is your first Flutter project:
 
-## more detailes coming soon .... 
-# wip
+- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
+For help getting started with Flutter, view our 
+[online documentation](https://flutter.dev/docs), which offers tutorials, 
+samples, guidance on mobile development, and a full API reference.
