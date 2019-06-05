@@ -5,6 +5,8 @@ import 'package:social/backend/firebase_auth.dart';
 import 'package:social/backend/my_db.dart';
 import 'package:social/custom_widgets/my_custom_post.dart';
 import 'package:social/custom_widgets/my_dialogs.dart';
+import 'package:social/custom_widgets/my_expandable_info.dart';
+import 'package:social/custom_widgets/my_expandable_post.dart';
 import 'package:social/custom_widgets/my_expandable_reviews.dart';
 import 'package:social/custom_widgets/my_text.dart';
 import 'package:social/pages/view_detailed_post.dart';
@@ -211,7 +213,17 @@ class _MyHomePageState extends State<MyHomePage>
   Widget _buildProfileTab() {
     return ListView(
       children: <Widget>[
+        ExpandablePersonalInfo(
+          uid: StaticContent.currentUser.uid,
+          context: context,
+        ),
+        Divider(color: Colors.black),
         MyExpandableReviews(
+          uid: StaticContent.currentUser.uid,
+          context: context,
+        ),
+        Divider(color: Colors.black),
+        ExpandablePosts(
           uid: StaticContent.currentUser.uid,
           context: context,
         ),

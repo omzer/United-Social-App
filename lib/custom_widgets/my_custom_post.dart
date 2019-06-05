@@ -8,14 +8,13 @@ class MyPostCard extends StatelessWidget {
   final String code;
   final String location;
   final String content;
-  final String tags;
-  String date;
   final int price;
   final String postId;
-  String image;
-  String name;
   final List<dynamic> photos;
   final Function onCardClicked;
+  String date;
+  String image;
+  String name;
 
   MyPostCard({
     this.photos,
@@ -26,7 +25,6 @@ class MyPostCard extends StatelessWidget {
     this.postId,
     this.date,
     this.location,
-    this.tags,
     this.content,
     this.price,
     this.onCardClicked,

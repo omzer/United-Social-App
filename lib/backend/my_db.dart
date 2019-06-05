@@ -165,7 +165,35 @@ class MyDB {
     return imageURL;
   }
 
-  static Future<void> getAllPostForUser(String uid) async {}
+  static Future<List<dynamic>> getAllPostForUser(String uid) async {
+    List<dynamic> posts = [];
+    DocumentSnapshot userData;
+    await _db.collection('users').document(uid).get().then((_) => userData = _);
+    List<dynamic> postsId = userData.data['posts'];
+
+    for (int i = 0; i < postsId.length; i++) {
+      DocumentSnapshot post;
+      await _db
+          .collection('posts')
+          .document(postsId[i])
+          .get()
+          .then((_) => post = _);
+      posts.add(
+        {
+          'uid': post.data['uid'],
+          'location': post.data['location'],
+          'date': post.data['date'],
+          'code': post.data['code'],
+          'price': post.data['price'],
+          'content': post.data['description'],
+          'photos': post.data['photos'],
+          'postId': post.documentID,
+        },
+      );
+    }
+
+    return posts;
+  }
 
   static Future<void> addRateToPost(
     BuildContext context,
@@ -263,5 +291,21 @@ class MyDB {
     }
 
     return list;
+  }
+
+  static Future<dynamic> getUserInfo(String uid) async {
+    dynamic userInfo;
+    DocumentSnapshot userData;
+    await _db.collection('users').document(uid).get().then((_) => userData = _);
+
+    userInfo = {
+      'age': userData.data['age'],
+      'bio': userData.data['bio'],
+      'city': userData.data['city'],
+      'email': userData.data['email'],
+      'gender': userData.data['gender'],
+    };
+
+    return userInfo;
   }
 }
