@@ -230,4 +230,38 @@ class MyDB {
       StaticContent.pushReplacement(context, HomePage());
     });
   }
+
+  static Future<List<dynamic>> getReviews(String uid) async {
+    List<dynamic> list = [];
+    String rateContent, imgURL, name, id;
+    int rate;
+    QuerySnapshot reviews;
+    await _db
+        .collection('users')
+        .document(uid)
+        .collection('rate')
+        .getDocuments()
+        .then(
+      (QuerySnapshot _) {
+        reviews = _;
+      },
+    );
+    for (int i = 0; i < reviews.documents.length; i++) {
+      rate = reviews.documents[i]['rate'];
+      rateContent = reviews.documents[i]['rateContent'];
+      id = reviews.documents[i]['uid'];
+      await _db.collection('users').document(id).get().then((_) {
+        imgURL = _.data['photoURL'];
+        name = _.data['displayName'];
+        list.add({
+          'rateContent': rateContent,
+          'imgURL': imgURL,
+          'name': name,
+          'rate': rate,
+        });
+      });
+    }
+
+    return list;
+  }
 }

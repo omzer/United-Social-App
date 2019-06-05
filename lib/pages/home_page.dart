@@ -5,6 +5,7 @@ import 'package:social/backend/firebase_auth.dart';
 import 'package:social/backend/my_db.dart';
 import 'package:social/custom_widgets/my_custom_post.dart';
 import 'package:social/custom_widgets/my_dialogs.dart';
+import 'package:social/custom_widgets/my_expandable_reviews.dart';
 import 'package:social/custom_widgets/my_text.dart';
 import 'package:social/pages/view_detailed_post.dart';
 import 'new_post_page.dart';
@@ -208,7 +209,14 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   Widget _buildProfileTab() {
-    return Icon(Icons.account_balance);
+    return ListView(
+      children: <Widget>[
+        MyExpandableReviews(
+          uid: StaticContent.currentUser.uid,
+          context: context,
+        ),
+      ],
+    );
   }
 
   Widget _buildMessagesTab() {

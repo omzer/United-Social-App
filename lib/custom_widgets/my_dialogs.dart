@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:social/MyClasses/static_content.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:social/backend/my_db.dart';
 import 'package:social/custom_widgets/my_custom_textfeild.dart';
 import 'package:social/custom_widgets/my_star_rating.dart';
@@ -13,7 +12,7 @@ class MyDialogs {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
-          content: Text(content),
+          content: SingleChildScrollView(child: Text(content)),
           actions: <Widget>[
             FlatButton(
               onPressed: () => Navigator.pop(context),
