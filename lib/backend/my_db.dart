@@ -99,12 +99,13 @@ class MyDB {
   }
 
   static Future<void> newPost(
-      BuildContext context,
-      String content,
-      List<String> photos,
-      List<String> tags,
-      String location,
-      int price) async {
+    BuildContext context,
+    String content,
+    List<String> photos,
+    List<String> tags,
+    String location,
+    double price,
+  ) async {
     String newPostId = 'nothing';
     String code = Random().nextInt(100000000).toString();
     _db.collection('posts').add({

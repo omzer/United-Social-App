@@ -8,7 +8,7 @@ class MyPostCard extends StatelessWidget {
   final String code;
   final String location;
   final String content;
-  final int price;
+  final double price;
   final String postId;
   final List<dynamic> photos;
   final Function onCardClicked;
@@ -34,7 +34,6 @@ class MyPostCard extends StatelessWidget {
   SizedBox box;
   @override
   Widget build(BuildContext context) {
-
     _context = context;
     if (box != null) return box;
     return box = SizedBox(

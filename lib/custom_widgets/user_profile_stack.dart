@@ -7,7 +7,7 @@ import 'package:smooth_star_rating/smooth_star_rating.dart';
 class ProfileCard extends StatefulWidget {
   final BuildContext context;
   final String uid;
-
+  Stack memo;
   ProfileCard({
     this.uid,
     this.context,
@@ -74,19 +74,17 @@ class _ProfileCardState extends State<ProfileCard> {
     );
   }
 
-  Widget memo;
-
   Widget _buildFuture() {
-    if (memo != null) return memo;
+    if (widget.memo != null) return widget.memo;
     return FutureBuilder(
       future: MyDB.getUserDataForProfile(widget.uid),
       builder: (context, snap) {
         if (snap.connectionState == ConnectionState.waiting)
           return Center(child: CircularProgressIndicator());
         if (snap.hasError) {
-          return Center(child: Text('Error occured!!'));
+          return Center(child: Text('Error occured!'));
         }
-        return memo = Stack(
+        return widget.memo = Stack(
           children: <Widget>[
             _buildBackground(),
             _buildUserName(snap.data['name']),
@@ -155,12 +153,8 @@ class _ProfileCardState extends State<ProfileCard> {
       await MyDB.followUser(widget.uid);
     }
     setState(() {
-      memo = null;
+      widget.memo = null;
     });
     clicked = false;
-  }
-
-  void _sendMessage() {
-    print('heelo');
   }
 }

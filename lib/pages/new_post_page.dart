@@ -308,9 +308,9 @@ class _NewPostPageStateStf extends State<NewPostPageStf> {
         _price = '0';
       });
     }
-    int price = 0;
+    double price = 0;
     try {
-      price = int.parse(_price);
+      price = double.parse(_price);
     } catch (error) {
       MyDialogs.showCustomDialog(context, 'Wrong price',
           'Please right valid price (should be integer)');
