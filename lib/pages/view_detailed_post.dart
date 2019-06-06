@@ -104,10 +104,10 @@ class ViewDetailedPost extends StatelessWidget {
 
   Widget _buildUserImage() {
     return Center(
-      child: Hero(
-        tag: post.postId,
-        child: InkWell(
-          onTap: _goToUserProfile,
+      child: InkWell(
+        onTap: _goToUserProfile,
+        child: Hero(
+          tag: post.postId,
           child: CircleAvatar(
             backgroundImage: NetworkImage(post.image),
             radius: 60,

@@ -39,6 +39,17 @@ class UserProfile extends StatelessWidget {
     return AppBar(
       title: Text('User Profile'),
       elevation: 0,
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(
+            Icons.send,
+            color: Colors.white,
+          ),
+          onPressed: _sendMessage,
+        )
+      ],
     );
   }
+
+  void _sendMessage() {}
 }

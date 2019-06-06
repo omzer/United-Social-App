@@ -10,6 +10,7 @@ import 'package:social/custom_widgets/my_expandable_post.dart';
 import 'package:social/custom_widgets/my_expandable_reviews.dart';
 import 'package:social/custom_widgets/my_text.dart';
 import 'package:social/custom_widgets/user_profile_stack.dart';
+import 'package:social/pages/search_page.dart';
 import 'package:social/pages/view_detailed_post.dart';
 import 'new_post_page.dart';
 
@@ -102,9 +103,12 @@ class _MyHomePageState extends State<MyHomePage>
     return AppBar(
       elevation: 0,
       title: FlatButton.icon(
-        icon: Icon(
-          Icons.search,
-          color: Colors.white,
+        icon: Hero(
+          tag: 'search',
+          child: Icon(
+            Icons.search,
+            color: Colors.white,
+          ),
         ),
         label: MyText(
           content: 'look up for a hero!',
@@ -251,7 +255,7 @@ class _MyHomePageState extends State<MyHomePage>
     StaticContent.push(context, ViewDetailedPost(post: post));
   }
 
-  void _search() {}
+  void _search() => StaticContent.push(context, SearchPage());
 
   void _newPost() => StaticContent.push(context, NewPostPage());
 
