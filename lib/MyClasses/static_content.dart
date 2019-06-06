@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:social/pages/search_page.dart';
 import 'my_user.dart';
 
 class StaticContent {

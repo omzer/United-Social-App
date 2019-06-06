@@ -255,7 +255,7 @@ class _MyHomePageState extends State<MyHomePage>
     StaticContent.push(context, ViewDetailedPost(post: post));
   }
 
-  void _search() => StaticContent.push(context, SearchPage());
+  void _search() => StaticContent.push(context, SearchPageStatless());
 
   void _newPost() => StaticContent.push(context, NewPostPage());
 

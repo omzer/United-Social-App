@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -8,6 +9,7 @@ import 'package:social/custom_widgets/my_dialogs.dart';
 import 'package:social/pages/home_page.dart';
 import 'package:social/pages/view_detailed_post.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:http/http.dart' as http;
 
 class MyDB {
   static final _db = Firestore.instance;
@@ -395,5 +397,30 @@ class MyDB {
         },
       );
     });
+  }
+
+  // ----------------------- http requests
+  static final String httpURL =
+      'http://mujshrf-001-site1.etempurl.com/api/values';
+
+  static Future<List<dynamic>> getSearchResult(String query) async {
+    http.Response response = await http.post(
+      Uri.encodeFull('$httpURL'),
+      headers: {
+        'value': query,
+      },
+    );
+    List result = json.decode(response.body);
+    List<dynamic> list = [];
+
+    result.forEach((user) {
+      list.add({
+        'uid': user['uid'],
+        'name': user['displayName'],
+        'img': user['photoURL'],
+      });
+    });
+
+    return list;
   }
 }
