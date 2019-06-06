@@ -271,6 +271,10 @@ class ViewDetailedPost extends StatelessWidget {
   }
 
   void _goToUserProfile() {
-    StaticContent.push(_context, UserProfile(uid: post.uid));
+    StaticContent.push(
+        _context,
+        UserProfile(
+          uid: post.uid,
+        ));
   }
 }

@@ -4,7 +4,7 @@ import 'my_user.dart';
 
 class StaticContent {
   static User currentUser;
-
+  static double totalReviews = 0;
   static void push(BuildContext context, var destination) {
     Navigator.push(
       context,
@@ -30,5 +30,4 @@ class StaticContent {
       'https://firebasestorage.googleapis.com/v0/b/freeworker-5517f.appspot.com/o/boy.png?alt=media&token=3faad434-141a-49b3-9176-40af208323e5';
   static String defaultFemaleImg =
       'https://firebasestorage.googleapis.com/v0/b/freeworker-5517f.appspot.com/o/girl.png?alt=media&token=e8a423db-4994-49ff-94a9-2c91e7a2e4a3';
-
 }

@@ -1,5 +1,6 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:social/MyClasses/static_content.dart';
 import 'package:social/backend/my_db.dart';
 import 'package:social/custom_widgets/my_dialogs.dart';
 import 'package:social/custom_widgets/my_text.dart';
@@ -8,6 +9,7 @@ import 'package:smooth_star_rating/smooth_star_rating.dart';
 class MyExpandableReviews extends StatelessWidget {
   final String uid;
   final BuildContext context;
+
   MyExpandableReviews({
     this.uid,
     this.context,
@@ -30,15 +32,17 @@ class MyExpandableReviews extends StatelessWidget {
         }
         List<dynamic> listOfReviews = snap.data;
         List<Widget> listOfWidgets = [];
+
+        if (listOfReviews.isEmpty) {
+          return Text('no reviews yet');
+        }
         listOfReviews.forEach((review) {
-          listOfWidgets.add(
-            _buildReview(
-              review['rate'],
-              review['rateContent'],
-              review['imgURL'],
-              review['name'],
-            ),
-          );
+          listOfWidgets.add(_buildReview(
+            review['rate'],
+            review['rateContent'],
+            review['imgURL'],
+            review['name'],
+          ));
           listOfWidgets.add(SizedBox(height: 8));
         });
         return Column(children: listOfWidgets);

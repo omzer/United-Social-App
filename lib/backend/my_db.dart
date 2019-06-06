@@ -170,6 +170,7 @@ class MyDB {
     DocumentSnapshot userData;
     await _db.collection('users').document(uid).get().then((_) => userData = _);
     List<dynamic> postsId = userData.data['posts'];
+    if (postsId == null) return posts;
 
     for (int i = 0; i < postsId.length; i++) {
       DocumentSnapshot post;
@@ -191,7 +192,6 @@ class MyDB {
         },
       );
     }
-
     return posts;
   }
 
@@ -274,8 +274,12 @@ class MyDB {
         reviews = _;
       },
     );
+    if (reviews.documents.length == 0) return list;
+
+    StaticContent.totalReviews = 0;
     for (int i = 0; i < reviews.documents.length; i++) {
       rate = reviews.documents[i]['rate'];
+      StaticContent.totalReviews += rate;
       rateContent = reviews.documents[i]['rateContent'];
       id = reviews.documents[i]['uid'];
       await _db.collection('users').document(id).get().then((_) {
@@ -289,6 +293,8 @@ class MyDB {
         });
       });
     }
+    StaticContent.totalReviews /= reviews.documents.length;
+    StaticContent.totalReviews = StaticContent.totalReviews.roundToDouble();
 
     return list;
   }
@@ -307,5 +313,86 @@ class MyDB {
     };
 
     return userInfo;
+  }
+
+  static Future<dynamic> getUserDataForProfile(String uid) async {
+    DocumentSnapshot userData;
+    await _db.collection('users').document(uid).get().then((_) => userData = _);
+
+    return {
+      'name': '${userData.data['displayName']} ${userData.data['familyName']}',
+      'url': userData.data['photoURL'],
+    };
+  }
+
+  static Future<bool> isFollower(String uid) async {
+    bool result = false;
+    await _db
+        .collection('users')
+        .document(StaticContent.currentUser.uid)
+        .collection('following')
+        .where('uid==$uid')
+        .getDocuments()
+        .then((_) {
+      result = _.documents.isNotEmpty;
+    });
+
+    return result;
+  }
+
+  static Future<void> followUser(String uid) async {
+    await _db
+        .collection('users')
+        .document(StaticContent.currentUser.uid)
+        .collection('following')
+        .add(
+      {
+        'uid': uid,
+      },
+    );
+
+    await _db.collection('users').document(uid).collection('follower').add({
+      'uid': StaticContent.currentUser.uid,
+    });
+  }
+
+  static Future<void> unFollowUser(String uid) async {
+    await _db
+        .collection('users')
+        .document(StaticContent.currentUser.uid)
+        .collection('following')
+        .where('uid==$uid')
+        .getDocuments()
+        .then((_) {
+      _.documents.forEach(
+        (document) {
+          _db
+              .collection('users')
+              .document(StaticContent.currentUser.uid)
+              .collection('following')
+              .document(document.documentID)
+              .delete();
+        },
+      );
+    });
+
+    await _db
+        .collection('users')
+        .document(uid)
+        .collection('follower')
+        .where('uid==${StaticContent.currentUser.uid}')
+        .getDocuments()
+        .then((_) {
+      _.documents.forEach(
+        (document) {
+          _db
+              .collection('users')
+              .document(uid)
+              .collection('follower')
+              .document(document.documentID)
+              .delete();
+        },
+      );
+    });
   }
 }

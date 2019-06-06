@@ -34,6 +34,7 @@ class MyPostCard extends StatelessWidget {
   SizedBox box;
   @override
   Widget build(BuildContext context) {
+
     _context = context;
     if (box != null) return box;
     return box = SizedBox(

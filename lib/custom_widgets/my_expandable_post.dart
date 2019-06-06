@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:expandable/expandable.dart';
+import 'package:social/MyClasses/static_content.dart';
 import 'package:social/backend/my_db.dart';
 import 'package:social/custom_widgets/my_custom_post.dart';
+import 'package:social/pages/view_detailed_post.dart';
 
 import 'my_text.dart';
 
@@ -50,17 +52,20 @@ class ExpandablePosts extends StatelessWidget {
         List<dynamic> postsSanp = snap.data;
 
         postsSanp.forEach((post) {
-          posts.add(MyPostCard(
+          MyPostCard card;
+          card = MyPostCard(
             uid: post['uid'],
             location: post['location'],
             date: post['date'],
             code: post['code'],
             price: post['price'],
-            content: post['description'],
+            content: post['content'],
             photos: post['photos'],
             postId: post['postId'],
-            onCardClicked: () => print('todooooo'),
-          ));
+            onCardClicked: () =>
+                StaticContent.push(context, ViewDetailedPost(post: card)),
+          );
+          posts.add(card);
         });
 
         return Column(children: posts);

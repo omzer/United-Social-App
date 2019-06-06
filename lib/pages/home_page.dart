@@ -9,6 +9,7 @@ import 'package:social/custom_widgets/my_expandable_info.dart';
 import 'package:social/custom_widgets/my_expandable_post.dart';
 import 'package:social/custom_widgets/my_expandable_reviews.dart';
 import 'package:social/custom_widgets/my_text.dart';
+import 'package:social/custom_widgets/user_profile_stack.dart';
 import 'package:social/pages/view_detailed_post.dart';
 import 'new_post_page.dart';
 
@@ -129,11 +130,9 @@ class _MyHomePageState extends State<MyHomePage>
       bottom: TabBar(
         controller: _tabController,
         onTap: (int position) {
-          setState(
-            () {
-              _currentPage = position;
-            },
-          );
+          setState(() {
+            _currentPage = position;
+          });
         },
         tabs: <Widget>[
           Tab(icon: Icon(Icons.home), text: 'Home'),
@@ -210,24 +209,35 @@ class _MyHomePageState extends State<MyHomePage>
     );
   }
 
+  List<Widget> profileWidgets = [];
   Widget _buildProfileTab() {
-    return ListView(
-      children: <Widget>[
-        ExpandablePersonalInfo(
-          uid: StaticContent.currentUser.uid,
-          context: context,
-        ),
-        Divider(color: Colors.black),
-        MyExpandableReviews(
-          uid: StaticContent.currentUser.uid,
-          context: context,
-        ),
-        Divider(color: Colors.black),
-        ExpandablePosts(
-          uid: StaticContent.currentUser.uid,
-          context: context,
-        ),
-      ],
+    if (profileWidgets.isEmpty) {
+      // Personal info section
+      profileWidgets.add(ExpandablePersonalInfo(
+          uid: StaticContent.currentUser.uid, context: context));
+      profileWidgets.add(Divider(color: Colors.black));
+      // Reviews section
+      profileWidgets.add(MyExpandableReviews(
+          uid: StaticContent.currentUser.uid, context: context));
+      profileWidgets.add(Divider(color: Colors.black));
+      // Posts section
+      profileWidgets.add(ExpandablePosts(
+          uid: StaticContent.currentUser.uid, context: context));
+      // Profile img and name (first element in the page)
+      profileWidgets.insert(
+        0,
+        ProfileCard(uid: StaticContent.currentUser.uid, context: context),
+      );
+    }
+    return LiquidPullToRefresh(
+      showChildOpacityTransition: false,
+      child: ListView(children: profileWidgets),
+      onRefresh: () async {
+        await Future.delayed(Duration(milliseconds: 1500));
+        setState(() {
+          profileWidgets = [];
+        });
+      },
     );
   }
 
