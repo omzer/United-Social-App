@@ -41,7 +41,7 @@ class MyPostCard extends StatelessWidget {
       height: 240,
       child: Center(
         child: Card(
-          elevation: 8,
+          elevation: 10,
           margin: EdgeInsets.all(8.0),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
