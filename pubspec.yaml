@@ -67,9 +67,13 @@ flutter:
    - lib/assets/imgs/content.png
    - lib/assets/imgs/login_logo.png
    - lib/assets/imgs/gears.png
+   - lib/assets/imgs/name.png
    - lib/assets/imgs/money_bag.png
    - lib/assets/imgs/router.png
    - lib/assets/imgs/start.png
+   - lib/assets/imgs/cake.png
+   - lib/assets/imgs/city.png
+   - lib/assets/imgs/notepad.png
    - lib/assets/imgs/logo.png
    - lib/assets/imgs/thinking.png
   #  - images/a_dot_ham.jpeg

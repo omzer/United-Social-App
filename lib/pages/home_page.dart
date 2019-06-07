@@ -12,6 +12,7 @@ import 'package:social/custom_widgets/my_text.dart';
 import 'package:social/custom_widgets/user_profile_stack.dart';
 import 'package:social/pages/search_page.dart';
 import 'package:social/pages/view_detailed_post.dart';
+import 'edit_profile.dart';
 import 'new_post_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -259,7 +260,7 @@ class _MyHomePageState extends State<MyHomePage>
 
   void _newPost() => StaticContent.push(context, NewPostPage());
 
-  void _editProfile() {}
+  void _editProfile() => StaticContent.push(context, EditPage());
 
   void _sendNewMessage() {}
 }

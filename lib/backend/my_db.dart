@@ -399,6 +399,49 @@ class MyDB {
     });
   }
 
+  static Future<dynamic> getUserInfoToUpdate() async {
+    DocumentSnapshot userData;
+    await _db
+        .collection('users')
+        .document(StaticContent.currentUser.uid)
+        .get()
+        .then((_) => userData = _);
+
+    dynamic user = userData.data;
+    return {
+      'name': user['displayName'],
+      'family': user['familyName'],
+      'age': user['age'] ?? 0,
+      'bio': user['bio'] ?? '',
+      'city': user['city'] ?? '',
+      'photo': user['photoURL'] ?? 'no photo',
+    };
+  }
+
+  static Future<void> updateUserInfo(
+    BuildContext context,
+    String name,
+    String familyName,
+    double age,
+    String bio,
+    String city,
+    String photo,
+  ) async {
+    await _db
+        .collection('users')
+        .document(StaticContent.currentUser.uid)
+        .updateData({
+      'displayName': name,
+      'familyName': familyName,
+      'age': age,
+      'bio': bio,
+      'city': city,
+      'photoURL': photo,
+    }).then((_) {
+      Navigator.pop(context);
+    });
+  }
+
   // ----------------------- http requests
   static final String httpURL =
       'http://mujshrf-001-site1.etempurl.com/api/values';

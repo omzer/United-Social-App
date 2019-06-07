@@ -47,13 +47,13 @@ class ExpandablePersonalInfo extends StatelessWidget {
         List<Widget> widgets = [];
         // bio
         widgets.add(
-          _buildListTile(Icons.view_list, 'Biography',
+          _buildListTile(Icons.speaker_notes, 'Biography',
               snap.data['bio'] ?? 'not added yet'),
         );
         // age
         widgets.add(
-          _buildListTile(
-              Icons.child_care, 'Age', '${snap.data['age'] ?? '-'} years old'),
+          _buildListTile(Icons.child_care, 'Age',
+              '${snap.data['age'].toInt() ?? '-'} years old'),
         );
         // city
         widgets.add(

@@ -59,7 +59,8 @@ class MyPostCard extends StatelessWidget {
                       _buildPostDate(),
                       _buildContent(),
                       _buildPrice(),
-                      _buildAuthorName(snap.data['displayName']),
+                      _buildAuthorName(
+                          '${snap.data['displayName']} ${snap.data['familyName']}'),
                       _buildAuthorImage(snap.data['photoURL'])
                     ],
                   );
