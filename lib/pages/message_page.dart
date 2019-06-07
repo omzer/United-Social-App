@@ -175,6 +175,7 @@ class _MessagePageStatestf extends State<MessagePagestf> {
             borderRadius: BorderRadius.circular(10),
             color: Colors.white,
             child: TextField(
+              style: TextStyle(color: Colors.black87),
               controller: TextEditingController(text: _message),
               onChanged: (_) => _message = _,
               decoration: InputDecoration(
@@ -186,34 +187,38 @@ class _MessagePageStatestf extends State<MessagePagestf> {
                   color: Colors.black,
                 ),
                 suffixIcon: SizedBox(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(
-                          Icons.send,
-                          color: Colors.blue,
+                  child: Container(
+                    width: 100,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(
+                            Icons.send,
+                            color: Colors.blue,
+                          ),
+                          onPressed: () {
+                            if (_message == null || _message.length == 0)
+                              return;
+                            MyDB.sendTextMessage(widget.uid, _message);
+                            setState(() {
+                              _message = '';
+                            });
+                          },
                         ),
-                        onPressed: () {
-                          if (_message == null || _message.length == 0) return;
-                          MyDB.sendTextMessage(widget.uid, _message);
-                          setState(() {
-                            _message = '';
-                          });
-                        },
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.image,
-                          color: Colors.blue,
-                        ),
-                        onPressed: () async {
-                          String imgURL = await _addImage();
-                          if (imgURL == null) return;
-                          MyDB.sendImageMessage(widget.uid, imgURL);
-                        },
-                      )
-                    ],
+                        IconButton(
+                          icon: Icon(
+                            Icons.image,
+                            color: Colors.blue,
+                          ),
+                          onPressed: () async {
+                            String imgURL = await _addImage();
+                            if (imgURL == null) return;
+                            MyDB.sendImageMessage(widget.uid, imgURL);
+                          },
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
