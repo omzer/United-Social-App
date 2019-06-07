@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:social/MyClasses/static_content.dart';
 import 'package:social/backend/my_db.dart';
@@ -20,7 +21,7 @@ class MessagePagestf extends StatefulWidget {
   MessagePagestf({this.uid});
   static String myImg = StaticContent.defaultFemaleImg;
   static String userImg = StaticContent.defaultMaleImg;
-  static int countMessage = 0;
+
   @override
   _MessagePageStatestf createState() => _MessagePageStatestf();
 }
@@ -93,8 +94,17 @@ class _MessagePageStatestf extends State<MessagePagestf> {
             chip = _buildMessageChip(content, mine);
           else
             chip = _buildImage(imageUrl, mine);
-          MessagePagestf.countMessage++;
           widgets.add(chip);
+        });
+
+        Future.delayed(Duration(milliseconds: 500)).then((_) {
+          setState(() {
+            scrollController.animateTo(
+              scrollController.offset + 50,
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeIn,
+            );
+          });
         });
 
         return SingleChildScrollView(
@@ -146,6 +156,12 @@ class _MessagePageStatestf extends State<MessagePagestf> {
     );
   }
 
+  Future<String> _addImage() async {
+    String path = await FilePicker.getFilePath(type: FileType.IMAGE);
+    if (path == null) return null;
+    return await MyDB.uploadImage(path);
+  }
+
   Widget _buildBottomBar() {
     return SafeArea(
       child: Container(
@@ -169,27 +185,36 @@ class _MessagePageStatestf extends State<MessagePagestf> {
                   Icons.comment,
                   color: Colors.black,
                 ),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    Icons.send,
-                    color: Colors.blue,
+                suffixIcon: SizedBox(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(
+                          Icons.send,
+                          color: Colors.blue,
+                        ),
+                        onPressed: () {
+                          if (_message == null || _message.length == 0) return;
+                          MyDB.sendTextMessage(widget.uid, _message);
+                          setState(() {
+                            _message = '';
+                          });
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.image,
+                          color: Colors.blue,
+                        ),
+                        onPressed: () async {
+                          String imgURL = await _addImage();
+                          if (imgURL == null) return;
+                          MyDB.sendImageMessage(widget.uid, imgURL);
+                        },
+                      )
+                    ],
                   ),
-                  onPressed: () {
-                    if (_message == null || _message.length == 0) return;
-                    MyDB.sendMessage(widget.uid, _message);
-                    setState(() {
-                      _message = '';
-                    });
-                    setState(() {
-                      Future.delayed(Duration(seconds: 2)).then((_) {
-                        scrollController.animateTo(
-                          scrollController.offset + 50,
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeIn,
-                        );
-                      });
-                    });
-                  },
                 ),
               ),
             ),

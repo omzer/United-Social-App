@@ -53,7 +53,7 @@ class ExpandablePersonalInfo extends StatelessWidget {
         // age
         widgets.add(
           _buildListTile(Icons.child_care, 'Age',
-              '${snap.data['age'].toInt() ?? '-'} years old'),
+              '${snap.data['age'] ?? 0.toInt() ?? '-'} years old'),
         );
         // city
         widgets.add(

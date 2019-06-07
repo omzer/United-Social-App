@@ -502,7 +502,7 @@ class MyDB {
         .snapshots();
   }
 
-  static Future<void> sendMessage(String uid, String message) async {
+  static Future<void> sendTextMessage(String uid, String message) async {
     String room = await getChatRoomId(uid);
     _db.collection('chats').document(room).collection('messages').add({
       'isRead': false,
@@ -512,6 +512,32 @@ class MyDB {
       'reciverId': uid,
       'senderId': StaticContent.currentUser.uid,
     });
+  }
+
+  static Future<void> sendImageMessage(String uid, String imgURL) async {
+    String room = await getChatRoomId(uid);
+    _db.collection('chats').document(room).collection('messages').add({
+      'isRead': false,
+      'imageUrl': imgURL,
+      'message_date': DateTime.now(),
+      'message_type': 2,
+      'reciverId': uid,
+      'senderId': StaticContent.currentUser.uid,
+    });
+  }
+
+  static Future<dynamic> getNameAndImg(String uid) async {
+    DocumentSnapshot doc = await _db.collection('users').document('user').get();
+    return {'name': doc.data['displayName']};
+  }
+
+  static Future<dynamic> getAllMessages() async {
+    String uid = StaticContent.currentUser.uid;
+    QuerySnapshot qs = await _db
+        .collection('users')
+        .document(uid)
+        .collection('chats')
+        .getDocuments();
   }
 
   // ----------------------- http requests
