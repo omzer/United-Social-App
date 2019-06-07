@@ -450,18 +450,19 @@ class MyDB {
     http.Response response = await http.post(
       Uri.encodeFull('$httpURL'),
       headers: {
-        'value': query,
+        'value': query ?? '',
       },
     );
     List result = json.decode(response.body);
     List<dynamic> list = [];
 
     result.forEach((user) {
-      list.add({
-        'uid': user['uid'],
-        'name': user['displayName'],
-        'img': user['photoURL'],
-      });
+      if (user['displayName'] != null) // to handle anonymous users
+        list.add({
+          'uid': user['uid'],
+          'name': user['displayName'],
+          'img': user['photoURL'],
+        });
     });
 
     return list;

@@ -7,7 +7,7 @@ import 'package:smooth_star_rating/smooth_star_rating.dart';
 class ProfileCard extends StatefulWidget {
   final BuildContext context;
   final String uid;
-  Stack memo;
+  List<Widget> memo = [];
   ProfileCard({
     this.uid,
     this.context,
@@ -75,7 +75,7 @@ class _ProfileCardState extends State<ProfileCard> {
   }
 
   Widget _buildFuture() {
-    if (widget.memo != null) return widget.memo;
+    if (widget.memo.isNotEmpty) return Stack(children: widget.memo);
     return FutureBuilder(
       future: MyDB.getUserDataForProfile(widget.uid),
       builder: (context, snap) {
@@ -84,15 +84,12 @@ class _ProfileCardState extends State<ProfileCard> {
         if (snap.hasError) {
           return Center(child: Text('Error occured!'));
         }
-        return widget.memo = Stack(
-          children: <Widget>[
-            _buildBackground(),
-            _buildUserName(snap.data['name']),
-            _buildUserImg(snap.data['url']),
-            _buildUserRateBar(),
-            _buildFollowButtonFuture(),
-          ],
-        );
+        widget.memo.add(_buildBackground());
+        widget.memo.add(_buildUserName(snap.data['name']));
+        widget.memo.add(_buildUserImg(snap.data['url']));
+        widget.memo.add(_buildUserRateBar());
+        widget.memo.add(_buildFollowButtonFuture());
+        return Stack(children: widget.memo);
       },
     );
   }
@@ -153,7 +150,8 @@ class _ProfileCardState extends State<ProfileCard> {
       await MyDB.followUser(widget.uid);
     }
     setState(() {
-      widget.memo = null;
+      widget.memo.removeLast();
+      widget.memo.insert(4, _buildFollowButtonFuture());
     });
     clicked = false;
   }
