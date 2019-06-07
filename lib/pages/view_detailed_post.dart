@@ -5,6 +5,7 @@ import 'package:social/custom_widgets/my_custom_post.dart';
 import 'package:social/custom_widgets/my_custom_textfeild.dart';
 import 'package:social/custom_widgets/my_dialogs.dart';
 import 'package:social/custom_widgets/my_text.dart';
+import 'package:social/pages/message_page.dart';
 import 'package:social/pages/view_image.dart';
 import 'package:social/pages/view_profile.dart';
 
@@ -152,7 +153,8 @@ class ViewDetailedPost extends StatelessWidget {
     );
   }
 
-  void _sendMessage() {}
+  void _sendMessage() =>
+      StaticContent.push(_context, MessagePage(uid: post.uid));
 
   Widget _buildPrice() {
     return MyText(

@@ -5,6 +5,8 @@ import 'package:social/custom_widgets/my_expandable_post.dart';
 import 'package:social/custom_widgets/my_expandable_reviews.dart';
 import 'package:social/custom_widgets/user_profile_stack.dart';
 
+import 'message_page.dart';
+
 class UserProfile extends StatelessWidget {
   final String uid;
   BuildContext context;
@@ -15,6 +17,7 @@ class UserProfile extends StatelessWidget {
   List<Widget> widgets = [];
   @override
   Widget build(BuildContext context) {
+    this.context = context;
     if (widgets.isEmpty) {
       // Personal info section
       widgets.add(ExpandablePersonalInfo(uid: uid, context: context));
@@ -45,11 +48,9 @@ class UserProfile extends StatelessWidget {
             Icons.send,
             color: Colors.white,
           ),
-          onPressed: _sendMessage,
+          onPressed: () => StaticContent.push(context, MessagePage(uid: uid)),
         )
       ],
     );
   }
-
-  void _sendMessage() {}
 }

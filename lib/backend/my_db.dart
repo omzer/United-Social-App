@@ -7,6 +7,7 @@ import 'package:social/MyClasses/static_content.dart';
 import 'package:flutter/material.dart';
 import 'package:social/custom_widgets/my_dialogs.dart';
 import 'package:social/pages/home_page.dart';
+import 'package:social/pages/message_page.dart';
 import 'package:social/pages/view_detailed_post.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
@@ -313,6 +314,7 @@ class MyDB {
       'city': userData.data['city'],
       'email': userData.data['email'],
       'gender': userData.data['gender'],
+      'photo': userData.data['photoURL'],
     };
 
     return userInfo;
@@ -439,6 +441,76 @@ class MyDB {
       'photoURL': photo,
     }).then((_) {
       Navigator.pop(context);
+    });
+  }
+
+  static Future<String> _createRoomWithUser(String uid) async {
+    DocumentReference doc = await _db.collection('chats').add({
+      'reciverId': uid,
+      'sederId': StaticContent.currentUser.uid,
+    });
+    String room = doc.documentID;
+
+    await _db.collection('users').document(uid).collection('chats').add({
+      'room': room,
+      'uid': StaticContent.currentUser.uid,
+    });
+    await _db
+        .collection('users')
+        .document(StaticContent.currentUser.uid)
+        .collection('chats')
+        .add({
+      'room': room,
+      'uid': uid,
+    });
+
+    return room;
+  }
+
+  static Future<String> getChatRoomId(String uid) async {
+    String room = 'no rooms';
+
+    QuerySnapshot snap = await _db
+        .collection('users')
+        .document(StaticContent.currentUser.uid)
+        .collection('chats')
+        .where('uid==$uid')
+        .getDocuments();
+
+    if (snap.documents.isEmpty) {
+      room = await _createRoomWithUser(uid);
+    } else {
+      room = snap.documents[0].data['room'];
+    }
+
+    return room;
+  }
+
+  static Future<Stream<QuerySnapshot>> listenToRoom(String uid) async {
+    String room = await getChatRoomId(uid);
+    dynamic user = await getUserInfo(uid);
+    dynamic me = await getUserInfo(StaticContent.currentUser.uid);
+
+    MessagePagestf.myImg = me['photo'];
+    MessagePagestf.userImg = user['photo'];
+
+    return _db
+        .collection('chats')
+        .document(room)
+        .collection('messages')
+        .orderBy('message_date')
+        .snapshots();
+  }
+
+  static Future<void> sendMessage(String uid, String message) async {
+    String room = await getChatRoomId(uid);
+    _db.collection('chats').document(room).collection('messages').add({
+      'isRead': false,
+      'message': message,
+      'message_date': DateTime.now(),
+      'message_type': 1,
+      'reciverId': uid,
+      'senderId': StaticContent.currentUser.uid,
     });
   }
 
