@@ -178,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage>
           String location = currentPost['location'];
           String date = currentPost['date'];
           String code = currentPost['code'];
-          double price = currentPost['price'];
+          double price = currentPost['price'] * 1.0;
           String content = currentPost['description'];
           String postId = currentPost.documentID;
           List<dynamic> photos = currentPost['photos'];

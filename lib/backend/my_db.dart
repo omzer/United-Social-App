@@ -561,10 +561,12 @@ class MyDB {
       'http://mujshrf-001-site1.etempurl.com/api/values';
 
   static Future<List<dynamic>> getSearchResult(String query) async {
+    print('looking for $query');
     http.Response response = await http.post(
       Uri.encodeFull('$httpURL'),
       headers: {
         'value': query ?? '',
+        'Content-Type': 'application/json',
       },
     );
     List result = json.decode(response.body);

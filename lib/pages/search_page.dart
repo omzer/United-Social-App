@@ -111,6 +111,9 @@ class _SearchResultsState extends State<SearchResults> {
         if (snap.connectionState == ConnectionState.waiting) {
           return Column(children: <Widget>[LinearProgressIndicator()]);
         }
+        if (snap.hasError) {
+          return Center(child: Text('${snap.error} err'));
+        }
         List<dynamic> users = snap.data;
         List<Widget> widgets = [];
 

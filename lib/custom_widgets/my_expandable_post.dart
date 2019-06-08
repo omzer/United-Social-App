@@ -58,7 +58,7 @@ class ExpandablePosts extends StatelessWidget {
             location: post['location'],
             date: post['date'],
             code: post['code'],
-            price: post['price'],
+            price: post['price'] * 1.0,
             content: post['content'],
             photos: post['photos'],
             postId: post['postId'],
