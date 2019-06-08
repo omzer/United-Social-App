@@ -34,6 +34,7 @@ class _MessagePageStatestf extends State<MessagePagestf> {
   @override
   Widget build(BuildContext context) {
     this.context = context;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -68,6 +69,7 @@ class _MessagePageStatestf extends State<MessagePagestf> {
               if (snap.hasError) {
                 return Center(child: Text('error occured!'));
               }
+
               return _buildStream(snap.data);
             },
           );
@@ -81,7 +83,6 @@ class _MessagePageStatestf extends State<MessagePagestf> {
           return Center(child: Text('loading messages....'));
         }
         List<Widget> widgets = [];
-
         snap.data.documents.forEach((message) {
           String from = message['senderId'];
           String imageUrl = message['imageUrl'];
@@ -106,7 +107,6 @@ class _MessagePageStatestf extends State<MessagePagestf> {
             );
           });
         });
-
         return SingleChildScrollView(
           controller: scrollController,
           child: Column(children: widgets),

@@ -8,6 +8,7 @@ import 'package:social/custom_widgets/my_dialogs.dart';
 import 'package:social/custom_widgets/my_expandable_info.dart';
 import 'package:social/custom_widgets/my_expandable_post.dart';
 import 'package:social/custom_widgets/my_expandable_reviews.dart';
+import 'package:social/custom_widgets/my_messages_list.dart';
 import 'package:social/custom_widgets/my_text.dart';
 import 'package:social/custom_widgets/user_profile_stack.dart';
 import 'package:social/pages/search_page.dart';
@@ -247,7 +248,7 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   Widget _buildMessagesTab() {
-    return Icon(Icons.send);
+    return MessagesList();
   }
 
 //  Methods!
@@ -262,5 +263,5 @@ class _MyHomePageState extends State<MyHomePage>
 
   void _editProfile() => StaticContent.push(context, EditPage());
 
-  void _sendNewMessage() {}
+  void _sendNewMessage() => StaticContent.push(context, SearchPageStatless());
 }

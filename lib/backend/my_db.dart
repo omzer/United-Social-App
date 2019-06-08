@@ -445,6 +445,7 @@ class MyDB {
   }
 
   static Future<String> _createRoomWithUser(String uid) async {
+    print('creating room with $uid');
     DocumentReference doc = await _db.collection('chats').add({
       'reciverId': uid,
       'sederId': StaticContent.currentUser.uid,
@@ -468,7 +469,7 @@ class MyDB {
   }
 
   static Future<String> getChatRoomId(String uid) async {
-    String room = 'no rooms';
+    String room;
 
     QuerySnapshot snap = await _db
         .collection('users')
@@ -477,17 +478,21 @@ class MyDB {
         .where('uid==$uid')
         .getDocuments();
 
-    if (snap.documents.isEmpty) {
-      room = await _createRoomWithUser(uid);
-    } else {
-      room = snap.documents[0].data['room'];
-    }
+    snap.documents.forEach((doc) {
+      if (doc['uid'] == uid) {
+        room = doc['room'];
+        return;
+      }
+    });
+
+    if (room == null) room = await _createRoomWithUser(uid);
 
     return room;
   }
 
   static Future<Stream<QuerySnapshot>> listenToRoom(String uid) async {
     String room = await getChatRoomId(uid);
+
     dynamic user = await getUserInfo(uid);
     dynamic me = await getUserInfo(StaticContent.currentUser.uid);
 
@@ -527,8 +532,11 @@ class MyDB {
   }
 
   static Future<dynamic> getNameAndImg(String uid) async {
-    DocumentSnapshot doc = await _db.collection('users').document('user').get();
-    return {'name': doc.data['displayName']};
+    DocumentSnapshot doc = await _db.collection('users').document(uid).get();
+    return {
+      'name': doc.data['displayName'],
+      'img': doc.data['photoURL'],
+    };
   }
 
   static Future<dynamic> getAllMessages() async {
@@ -536,6 +544,14 @@ class MyDB {
     QuerySnapshot qs = await _db
         .collection('users')
         .document(uid)
+        .collection('chats')
+        .getDocuments();
+  }
+
+  static Future<QuerySnapshot> listenToMessages() {
+    return _db
+        .collection('users')
+        .document(StaticContent.currentUser.uid)
         .collection('chats')
         .getDocuments();
   }
